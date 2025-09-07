@@ -10,7 +10,7 @@ import { CheckCircle, AlertTriangle, Lightbulb } from 'lucide-react';
 import { FavoriteButton } from '@/components/ui/favorite-button';
 
 export default async function GroupDetailPage({ params }: { params: { id: string } }) {
-  const { id } = await params;
+  const { id } = params;
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/auth/login');
