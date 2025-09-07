@@ -58,12 +58,12 @@ export default function LearningReportClient({ initialData }: LearningReportClie
                   className="w-full justify-start mb-2"
                   onClick={() => setActiveModule(key)}
                 >
-                  {modules[key].title}
+                  {modules[key as keyof typeof modules].title}
                 </Button>
               ))}
             </div>
             <div className="flex-1">
-              {modules[activeModule].component}
+              {modules[activeModule as keyof typeof modules].component}
             </div>
           </div>
         </div>

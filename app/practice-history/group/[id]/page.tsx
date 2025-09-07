@@ -10,13 +10,13 @@ import { CheckCircle, AlertTriangle, Lightbulb } from 'lucide-react';
 import { FavoriteButton } from '@/components/ui/favorite-button';
 
 type PageProps = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
 export default async function GroupDetailPage({ params }: PageProps) {
-  const { id } = params;
+  const { id } = await params;
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/auth/login');
@@ -55,7 +55,7 @@ export default async function GroupDetailPage({ params }: PageProps) {
                 <span>问题 {index + 1}: {session.interview_questions?.question_text}</span>
                 <div className="flex items-center space-x-2">
                   <Badge>{session.interview_stages?.stage_name}</Badge>
-                  <FavoriteButton questionId={session.question_id} />
+                  <FavoriteButton questionId={session.question_id.toString()} />
                 </div>
               </div>
             </CardHeader>

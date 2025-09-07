@@ -65,7 +65,15 @@ async function getLearningReportData(): Promise<LearningReportData | null> {
         sessions: [],
         totalSessions: 0,
         averageScore: 0,
-        improvementTrend: 0
+        improvementTrend: 0,
+        actionHandbook: {
+          improvementArea: '',
+          recommendedArticle: '',
+          practiceQuestion: '',
+          thinkingTool: ''
+        },
+        growthData: [],
+        abilities: []
       }
     }
 
@@ -135,6 +143,7 @@ export default async function LearningReportPage() {
         initialData={{
           sessions: data.sessions,
           totalSessions: data.totalSessions,
+          diagnosis: null,
           actionHandbook: data.actionHandbook,
           growthData: data.growthData,
           abilities: data.abilities
