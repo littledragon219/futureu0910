@@ -9,7 +9,13 @@ import { QualitativeFeedback } from '@/types/qualitative-feedback';
 import { CheckCircle, AlertTriangle, Lightbulb } from 'lucide-react';
 import { FavoriteButton } from '@/components/ui/favorite-button';
 
-export default async function GroupDetailPage({ params }: { params: { id: string } }) {
+type PageProps = {
+  params: {
+    id: string;
+  };
+};
+
+export default async function GroupDetailPage({ params }: PageProps) {
   const { id } = params;
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
