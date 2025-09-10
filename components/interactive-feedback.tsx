@@ -103,7 +103,7 @@ export default function InteractiveFeedback({ feedback, onRetry, onNextQuestion 
   ]
 
   const renderPreliminaryAnalysis = (evaluation: IndividualEvaluationResponse) => (
-    <div className={`p-4 rounded-lg border-l-4 ${evaluation.preliminaryAnalysis.isValid ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'}`}>
+    <div className={`p-4 rounded-lg border-l-2 ${evaluation.preliminaryAnalysis.isValid ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'}`}>
       <h4 className="font-semibold text-gray-900 mb-2 flex items-center">
         {evaluation.preliminaryAnalysis.isValid 
           ? <CheckCircle className="w-5 h-5 mr-2 text-green-600" /> 
@@ -116,7 +116,7 @@ export default function InteractiveFeedback({ feedback, onRetry, onNextQuestion 
 
   const renderStrengths = (strengths: IndividualEvaluationResponse['strengths']) => (
     strengths.map((strength, index) => (
-      <div key={`strength-${index}`} className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+      <div key={`strength-${index}`} className="bg-green-50 p-4 rounded-lg border-l-2 border-green-500">
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <Badge className="bg-green-100 text-green-800 mb-2">{strength.competency}</Badge>
@@ -132,7 +132,7 @@ export default function InteractiveFeedback({ feedback, onRetry, onNextQuestion 
     improvements.map((improvement, index) => {
       const key = `improvement-${index}`
       return (
-        <div key={key} className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
+        <div key={key} className="bg-orange-50 p-4 rounded-lg border-l-2 border-orange-500">
           <div className="space-y-3">
             <Badge className="bg-orange-100 text-orange-800">{improvement.competency}</Badge>
             <p className="text-gray-700">{improvement.suggestion}</p>
@@ -162,7 +162,7 @@ export default function InteractiveFeedback({ feedback, onRetry, onNextQuestion 
   )
   
   const renderFollowUpQuestion = (question: string) => (
-    <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500">
+    <div className="bg-purple-50 p-4 rounded-lg border-l-2 border-purple-500">
       <h4 className="font-semibold text-gray-900 mb-2 flex items-center">
         <MessageSquareQuote className="w-5 h-5 mr-2 text-purple-600" />
         深度追问
@@ -217,7 +217,7 @@ export default function InteractiveFeedback({ feedback, onRetry, onNextQuestion 
         <CardContent className="p-6">
           {activeTab === "summary" && (
             <div className="space-y-4">
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg border-l-4 border-blue-500">
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg border-l-2 border-blue-500">
                 <h3 className="font-semibold text-gray-900 mb-2 flex items-center">
                   <TrendingUp className="w-5 h-5 mr-2 text-blue-600" />
                   AI教练总结
@@ -342,7 +342,7 @@ export default function InteractiveFeedback({ feedback, onRetry, onNextQuestion 
             <span>查看完整学习报告</span>
           </Button>
         ) : (
-          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-md">
+          <div className="bg-yellow-50 border-l-2 border-yellow-400 p-4 rounded-md">
             <div className="flex">
               <div className="flex-shrink-0">
                 <AlertCircle className="h-5 w-5 text-yellow-500" />

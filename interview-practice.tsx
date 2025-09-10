@@ -918,19 +918,31 @@ export default function InterviewPractice({ moduleType = "hr", setModuleType, on
         "无法评估": 0,
       };
 
+      // 生成学习报告
+      const learningReport = {
+        overallSummary: evaluationResult.overallSummary,
+        individualEvaluations: evaluationResult.individualEvaluations,
+        stageInfo: evaluationResult.stageInfo,
+        timestamp: evaluationResult.timestamp,
+        evaluationId: evaluationResult.evaluationId
+      };
+
       const practiceData = {
         stage_type: moduleType,
-        questions_and_answers: questions.map((question, index) => ({
-          question: question.question_text,
-          answer: answers[index] || '',
-          question_id: question.id
-        })),
+        questions_and_answers: questions
+          .map((question, index) => ({
+            question: question.question_text,
+            answer: answers[index] || '',
+            question_id: question.id
+          }))
+          .filter((qa) => qa.answer && qa.answer.trim() !== ''), // 只保存有答案的题目
         evaluation_score: levelScoreMap[evaluationResult.overallSummary.overallLevel] ?? 60,
         ai_feedback: {
           summary: evaluationResult.overallSummary.summary,
           strengths: evaluationResult.overallSummary.strengths,
           improvements: evaluationResult.overallSummary.improvements,
-        }
+        },
+        learning_report: learningReport
       }
 
       console.log("💾 [前端] 保存练习记录:", practiceData)
@@ -1582,46 +1594,45 @@ export default function InterviewPractice({ moduleType = "hr", setModuleType, on
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* 头部导航 */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-4">
           <Button variant="ghost" onClick={() => { stopAllAudio(); onBack(); }} className="flex items-center gap-2">
             <ArrowLeft className="h-4 w-4" />
-            返回模块选择
+            <span className="hidden sm:inline">返回模块选择</span>
+            <span className="sm:hidden">返回</span>
           </Button>
           
-
-          
-          <div className="flex items-center gap-3">
-            <IconComponent className={`h-6 w-6 text-${currentStage.color}-600`} />
-            <h1 className="text-2xl font-bold text-gray-900">{currentStage.title}</h1>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <IconComponent className={`h-5 w-5 sm:h-6 sm:w-6 text-${currentStage.color}-600`} />
+            <h1 className="text-lg sm:text-2xl font-bold text-gray-900">{currentStage.title}</h1>
           </div>
         </div>
 
         {/* 概览阶段 */}
         {currentStep === "overview" && (
-          <div className="max-w-4xl mx-auto space-y-6">
+          <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5" />
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                  <Target className="h-4 w-4 sm:h-5 sm:w-5" />
                   练习概览
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-gray-600">{currentStage.description}</p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-blue-50 p-4 rounded-lg">
-                    <div className="text-2xl font-bold text-blue-600">{questions.length}</div>
-                    <div className="text-sm text-gray-600">本次练习题目</div>
+                <p className="text-sm sm:text-base text-gray-600">{currentStage.description}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                  <div className="bg-blue-50 p-3 sm:p-4 rounded-lg">
+                    <div className="text-xl sm:text-2xl font-bold text-blue-600">{questions.length}</div>
+                    <div className="text-xs sm:text-sm text-gray-600">本次练习题目</div>
                   </div>
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <div className="text-2xl font-bold text-green-600">5</div>
-                    <div className="text-sm text-gray-600">每题时间(分钟)</div>
+                  <div className="bg-green-50 p-3 sm:p-4 rounded-lg">
+                    <div className="text-xl sm:text-2xl font-bold text-green-600">5</div>
+                    <div className="text-xs sm:text-sm text-gray-600">每题时间(分钟)</div>
                   </div>
-                  <div className="bg-purple-50 p-4 rounded-lg">
-                    <div className="text-2xl font-bold text-purple-600">{totalQuestionsInStage}</div>
-                    <div className="text-sm text-gray-600">题库总数</div>
+                  <div className="bg-purple-50 p-3 sm:p-4 rounded-lg sm:col-span-2 lg:col-span-1">
+                    <div className="text-xl sm:text-2xl font-bold text-purple-600">{totalQuestionsInStage}</div>
+                    <div className="text-xs sm:text-sm text-gray-600">题库总数</div>
                   </div>
                 </div>
               </CardContent>
@@ -1631,37 +1642,37 @@ export default function InterviewPractice({ moduleType = "hr", setModuleType, on
             {deviceCheckStep !== "completed" && (
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Settings className="h-5 w-5" />
+                  <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                    <Settings className="h-4 w-4 sm:h-5 sm:w-5" />
                     设备检测
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <p className="text-gray-600">为了确保最佳的面试体验，请先检测您的麦克风和扬声器设备。</p>
+                  <p className="text-sm sm:text-base text-gray-600">为了确保最佳的面试体验，请先检测您的麦克风和扬声器设备。</p>
                   
                   {deviceCheckStep === "idle" && (
                     <div className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="bg-blue-50 p-4 rounded-lg">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                        <div className="bg-blue-50 p-3 sm:p-4 rounded-lg">
                           <div className="flex items-center gap-2 mb-2">
-                            <Mic className="h-5 w-5 text-blue-600" />
-                            <span className="font-medium">麦克风检测</span>
+                            <Mic className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
+                            <span className="text-sm sm:text-base font-medium">麦克风检测</span>
                           </div>
-                          <p className="text-sm text-gray-600">测试录音和语音转文字功能</p>
+                          <p className="text-xs sm:text-sm text-gray-600">测试录音和语音转文字功能</p>
                         </div>
-                        <div className="bg-green-50 p-4 rounded-lg">
+                        <div className="bg-green-50 p-3 sm:p-4 rounded-lg">
                           <div className="flex items-center gap-2 mb-2">
-                            <Volume2 className="h-5 w-5 text-green-600" />
-                            <span className="font-medium">扬声器检测</span>
+                            <Volume2 className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
+                            <span className="text-sm sm:text-base font-medium">扬声器检测</span>
                           </div>
-                          <p className="text-sm text-gray-600">测试音频播放功能</p>
+                          <p className="text-xs sm:text-sm text-gray-600">测试音频播放功能</p>
                         </div>
                       </div>
-                      <div className="flex gap-2">
-                        <Button onClick={startDeviceCheck} className="flex-1">
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <Button onClick={startDeviceCheck} className="flex-1 text-sm sm:text-base">
                           开始设备检测
                         </Button>
-                        <Button onClick={skipDeviceCheck} variant="outline">
+                        <Button onClick={skipDeviceCheck} variant="outline" className="text-sm sm:text-base">
                           跳过检测
                         </Button>
                       </div>
@@ -2058,24 +2069,24 @@ export default function InterviewPractice({ moduleType = "hr", setModuleType, on
                     placeholder="请输入您的答案，或点击麦克风按钮使用语音输入..."
                     value={currentAnswer + interimTranscript}
                     onChange={(e) => setCurrentAnswer(e.target.value)}
-                    className="min-h-[200px] resize-none pr-12"
+                    className="min-h-[150px] sm:min-h-[200px] resize-none pr-16 sm:pr-20 text-sm sm:text-base"
                   />
                   
                   {/* 语音识别按钮 */}
                   <Button
                     variant={isRecording ? "destructive" : "outline"}
                     onClick={toggleRecording}
-                    className="absolute bottom-3 right-3 h-12 px-4 rounded-lg shadow-sm"
+                    className="absolute bottom-2 sm:bottom-3 right-2 sm:right-3 h-10 sm:h-12 px-2 sm:px-4 rounded-lg shadow-sm"
                   >
                     {isRecording ? (
-                      <div className="flex items-center gap-2">
-                        <Pause className="h-5 w-5" />
-                        <span className="text-base font-medium">停止</span>
+                      <div className="flex items-center gap-1 sm:gap-2">
+                        <Pause className="h-4 w-4 sm:h-5 sm:w-5" />
+                        <span className="text-xs sm:text-base font-medium hidden sm:inline">停止</span>
                       </div>
                     ) : (
-                      <div className="flex items-center gap-2">
-                        <Mic className="h-5 w-5" />
-                        <span className="text-base font-medium">语音</span>
+                      <div className="flex items-center gap-1 sm:gap-2">
+                        <Mic className="h-4 w-4 sm:h-5 sm:w-5" />
+                        <span className="text-xs sm:text-base font-medium hidden sm:inline">语音</span>
                       </div>
                     )}
                   </Button>
@@ -2138,24 +2149,24 @@ export default function InterviewPractice({ moduleType = "hr", setModuleType, on
                   </div>
                 )}
                 
-                <div className="flex justify-between items-center">
-                  <div className="text-sm text-gray-500">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0">
+                  <div className="text-xs sm:text-sm text-gray-500 order-2 sm:order-1">
                     已输入 {currentAnswer.length} 字符
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2 order-1 sm:order-2">
                     <Button 
                       onClick={skipCurrentQuestion}
                       variant="outline"
-                      className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
+                      className="flex items-center gap-2 text-gray-600 hover:text-gray-800 text-sm sm:text-base py-2 sm:py-2.5"
                     >
                       ⏭️ 跳过此题
                     </Button>
                     <Button 
                       onClick={submitCurrentAnswer}
                       disabled={!currentAnswer.trim() && !answerRecordings[currentQuestionIndex]}
-                      className="flex items-center gap-2"
+                      className="flex items-center gap-2 text-sm sm:text-base py-2 sm:py-2.5"
                     >
-                      <Send className="h-4 w-4" />
+                      <Send className="h-3 w-3 sm:h-4 sm:w-4" />
                       {currentQuestionIndex < questions.length - 1 ? "下一题" : "完成答题"}
                     </Button>
                   </div>
@@ -2169,19 +2180,19 @@ export default function InterviewPractice({ moduleType = "hr", setModuleType, on
         {currentStep === "analyzing" && (
           <div className="max-w-2xl mx-auto">
             <Card>
-              <CardContent className="p-8 text-center">
-                <Brain className="h-12 w-12 animate-pulse mx-auto mb-4 text-blue-600" />
-                <h3 className="text-xl font-semibold mb-2">AI正在分析您的回答</h3>
-                <p className="text-gray-600 mb-6">请稍候，我们正在为您生成详细的评估报告...</p>
+              <CardContent className="p-6 sm:p-8 text-center">
+                <Brain className="h-10 w-10 sm:h-12 sm:w-12 animate-pulse mx-auto mb-4 text-blue-600" />
+                <h3 className="text-lg sm:text-xl font-semibold mb-2">AI正在分析您的回答</h3>
+                <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">请稍候，我们正在为您生成详细的评估报告...</p>
                 <div className="flex items-center justify-center space-x-2 my-4">
-                  <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
-                  <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                  <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                  <div className="w-2 h-2 sm:w-3 sm:h-3 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
+                  <div className="w-2 h-2 sm:w-3 sm:h-3 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="w-2 h-2 sm:w-3 sm:h-3 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
                 </div>
-                <p className="text-sm text-gray-500">这大约需要一分钟，请耐心等待。</p>
+                <p className="text-xs sm:text-sm text-gray-500">这大约需要一分钟，请耐心等待。</p>
                 {evaluationError && (
                   <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                    <p className="text-red-600 text-sm">{evaluationError}</p>
+                    <p className="text-red-600 text-xs sm:text-sm">{evaluationError}</p>
                   </div>
                 )}
               </CardContent>
@@ -2191,35 +2202,35 @@ export default function InterviewPractice({ moduleType = "hr", setModuleType, on
 
         {/* 结果阶段 */}
         {currentStep === "result" && feedback && (
-          <div className="max-w-4xl mx-auto space-y-6">
+          <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <CheckCircle className="h-5 w-5 text-green-600" />
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
                   评估完成
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4 sm:space-y-6">
                 {/* 总体评估 */}
-                <div className="text-center p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600 mb-2">
+                <div className="text-center p-4 sm:p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg">
+                  <div className="text-xl sm:text-2xl font-bold text-blue-600 mb-2">
                     {feedback.overallSummary.overallLevel}
                   </div>
-                  <p className="text-gray-700">{feedback.overallSummary.summary}</p>
+                  <p className="text-sm sm:text-base text-gray-700">{feedback.overallSummary.summary}</p>
                 </div>
 
                 {/* 优势分析 */}
                 {feedback.overallSummary.strengths && feedback.overallSummary.strengths.length > 0 && (
                   <div>
-                    <h4 className="font-semibold text-green-600 mb-3 flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4" />
+                    <h4 className="text-sm sm:text-base font-semibold text-green-600 mb-2 sm:mb-3 flex items-center gap-2">
+                      <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4" />
                       您的优势
                     </h4>
-                    <div className="space-y-3">
+                    <div className="space-y-2 sm:space-y-3">
                       {feedback.overallSummary.strengths.map((strength, index) => (
-                        <div key={index} className="p-4 bg-green-50 rounded-lg">
-                          <div className="font-medium text-green-800">{strength.competency}</div>
-                          <div className="text-green-700 text-sm mt-1">{strength.description}</div>
+                        <div key={index} className="p-3 sm:p-4 bg-green-50 rounded-lg">
+                          <div className="text-sm sm:text-base font-medium text-green-800">{strength.competency}</div>
+                          <div className="text-green-700 text-xs sm:text-sm mt-1">{strength.description}</div>
                         </div>
                       ))}
                     </div>
@@ -2229,17 +2240,17 @@ export default function InterviewPractice({ moduleType = "hr", setModuleType, on
                 {/* 改进建议 */}
                 {feedback.overallSummary.improvements && feedback.overallSummary.improvements.length > 0 && (
                   <div>
-                    <h4 className="font-semibold text-orange-600 mb-3 flex items-center gap-2">
-                      <Lightbulb className="h-4 w-4" />
+                    <h4 className="text-sm sm:text-base font-semibold text-orange-600 mb-2 sm:mb-3 flex items-center gap-2">
+                      <Lightbulb className="h-3 w-3 sm:h-4 sm:w-4" />
                       改进建议
                     </h4>
-                    <div className="space-y-3">
+                    <div className="space-y-2 sm:space-y-3">
                       {feedback.overallSummary.improvements.map((improvement, index) => (
-                        <div key={index} className="p-4 bg-orange-50 rounded-lg">
-                          <div className="font-medium text-orange-800">{improvement.competency}</div>
-                          <div className="text-orange-700 text-sm mt-1">{improvement.suggestion}</div>
+                        <div key={index} className="p-3 sm:p-4 bg-orange-50 rounded-lg">
+                          <div className="text-sm sm:text-base font-medium text-orange-800">{improvement.competency}</div>
+                          <div className="text-orange-700 text-xs sm:text-sm mt-1">{improvement.suggestion}</div>
                           {improvement.example && (
-                            <div className="text-orange-600 text-sm mt-2 italic">
+                            <div className="text-orange-600 text-xs sm:text-sm mt-2 italic">
                               示例：{improvement.example}
                             </div>
                           )}
@@ -2270,18 +2281,18 @@ export default function InterviewPractice({ moduleType = "hr", setModuleType, on
                 )}
 
                 {/* 操作按钮 */}
-                <div className="flex gap-3">
-                  <Button onClick={restartPractice} className="flex-1">
-                    <RotateCcw className="h-4 w-4 mr-2" />
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                  <Button onClick={restartPractice} className="flex-1 text-sm sm:text-base py-2.5 sm:py-3">
+                    <RotateCcw className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                     重新练习
                   </Button>
-                  <Button onClick={() => { stopAllAudio(); onBack(); }} className="flex-1">
-                    <ArrowLeft className="h-4 w-4 mr-2" />
+                  <Button onClick={() => { stopAllAudio(); onBack(); }} className="flex-1 text-sm sm:text-base py-2.5 sm:py-3">
+                    <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                     返回选择
                   </Button>
                   {isUserLoggedIn && (
-                    <Button onClick={() => window.location.href = '/learning-report'} className="flex-1 bg-green-600 hover:bg-green-700">
-                      <FileText className="h-4 w-4 mr-2" />
+                    <Button onClick={() => window.location.href = '/learning-report'} className="flex-1 bg-green-600 hover:bg-green-700 text-sm sm:text-base py-2.5 sm:py-3">
+                      <FileText className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                       查看完整报告
                     </Button>
                   )}

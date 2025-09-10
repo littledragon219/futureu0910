@@ -27,7 +27,6 @@ export default async function RootLayout({
     <html lang="zh-CN" suppressHydrationWarning>
       <head />
       <body className={GeistSans.className} suppressHydrationWarning>
-        <div className="animated-gradient"></div>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

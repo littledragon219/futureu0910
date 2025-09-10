@@ -3,24 +3,50 @@ const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 const path = require('path');
 
-// 手动读取.env.local文件
+// 手动读取环境变量文件
 function loadEnvFile() {
+  // 尝试读取.env.local文件
   try {
-    const envPath = path.join(__dirname, '.env.local');
-    const envContent = fs.readFileSync(envPath, 'utf8');
-    const lines = envContent.split('\n');
-    
-    lines.forEach(line => {
-      const trimmed = line.trim();
-      if (trimmed && !trimmed.startsWith('#')) {
-        const [key, ...valueParts] = trimmed.split('=');
-        if (key && valueParts.length > 0) {
-          process.env[key] = valueParts.join('=');
+    const envLocalPath = path.join(__dirname, '.env.local');
+    if (fs.existsSync(envLocalPath)) {
+      const envContent = fs.readFileSync(envLocalPath, 'utf8');
+      const lines = envContent.split('\n');
+      
+      lines.forEach(line => {
+        const trimmed = line.trim();
+        if (trimmed && !trimmed.startsWith('#')) {
+          const [key, ...valueParts] = trimmed.split('=');
+          if (key && valueParts.length > 0) {
+            process.env[key] = valueParts.join('=');
+          }
         }
-      }
-    });
+      });
+      console.log('✅ 成功读取.env.local文件');
+    }
   } catch (error) {
     console.log('⚠️ 无法读取.env.local文件:', error.message);
+  }
+  
+  // 尝试读取.env文件
+  try {
+    const envPath = path.join(__dirname, '.env');
+    if (fs.existsSync(envPath)) {
+      const envContent = fs.readFileSync(envPath, 'utf8');
+      const lines = envContent.split('\n');
+      
+      lines.forEach(line => {
+        const trimmed = line.trim();
+        if (trimmed && !trimmed.startsWith('#')) {
+          const [key, ...valueParts] = trimmed.split('=');
+          if (key && valueParts.length > 0 && !process.env[key]) {
+            process.env[key] = valueParts.join('=');
+          }
+        }
+      });
+      console.log('✅ 成功读取.env文件');
+    }
+  } catch (error) {
+    console.log('⚠️ 无法读取.env文件:', error.message);
   }
 }
 

@@ -3,16 +3,21 @@ import { cookies } from 'next/headers'
 import { cache } from 'react'
 
 // 检查 Supabase 是否已配置
-export const isSupabaseConfigured = !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+export const isSupabaseConfigured = true
 
 export const createSupabaseServerClient = cache(async () => {
   const cookieStore = await cookies()
 
-  const supabaseUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}?connect_timeout=30`
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Missing Supabase environment variables')
+  }
 
   return createServerClient(
     supabaseUrl,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseAnonKey,
     {
       cookies: {
         async get(name: string) {
@@ -44,11 +49,16 @@ export const createSupabaseServerClient = cache(async () => {
 export const createClient = cache(async () => {
   const cookieStore = await cookies()
 
-  const supabaseUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}?connect_timeout=30`
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Missing Supabase environment variables')
+  }
 
   return createServerClient(
     supabaseUrl,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseAnonKey,
     {
       cookies: {
         async get(name: string) {

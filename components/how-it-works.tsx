@@ -23,8 +23,8 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-20 px-6 bg-white">
-      <div className="max-w-7xl mx-auto">
+    <section id="how-it-works" className="py-20 w-full bg-white">
+      <div className="w-full px-4">
         <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">它能为我带来什么价值</h2>
         <div className="relative">
           {/* Timeline line */}

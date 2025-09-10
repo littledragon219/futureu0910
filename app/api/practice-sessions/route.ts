@@ -4,12 +4,13 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(request: NextRequest) {
   try {
     const requestBody = await request.json()
-    const { stage_type, questions_and_answers, evaluation_score, ai_feedback } = requestBody
+    const { stage_type, questions_and_answers, evaluation_score, ai_feedback, learning_report } = requestBody
 
     console.log('📝 [API] 保存练习记录请求:', {
       stage_type,
       questionCount: questions_and_answers?.length,
       evaluation_score,
+      hasLearningReport: !!learning_report,
       fullRequestBody: requestBody
     })
 
@@ -62,6 +63,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // 生成会话ID，将同一次练习的所有问题分组
+    const sessionId = crypto.randomUUID()
+    
     // 为每个问题计算分数并创建练习记录
     const practiceRecords = questions_and_answers.map((qa: any, index: number) => {
       const scores = calculateScores(ai_feedback, index, questions_and_answers.length)
@@ -76,7 +80,10 @@ export async function POST(request: NextRequest) {
         content_score: scores.content,
         logic_score: scores.logic,
         expression_score: scores.expression,
-        ai_feedback: JSON.stringify(ai_feedback) // 保存完整的AI反馈
+        ai_feedback: JSON.stringify(ai_feedback), // 保存完整的AI反馈
+        learning_report: learning_report ? JSON.stringify(learning_report) : null, // 保存学习报告
+        session_id: sessionId, // 会话ID
+        session_summary: learning_report?.summary || `${stage_type}阶段面试练习` // 会话总结
       }
     })
 

@@ -7,7 +7,6 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { LogOut, Settings, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-import Navigation from '@/components/navigation'
 import { supabase } from '@/lib/supabase/client'
 
 interface UserPreferences {
@@ -58,9 +57,7 @@ export function SettingsClient({ user, preferences }: SettingsClientProps) {
   }
 
   return (
-    <>
-      <Navigation currentPage="settings" />
-      <div className="p-6">
+    <div className="p-6">
         <div className="max-w-4xl mx-auto">
           {/* 页面标题 */}
           <div className="mb-8">
@@ -122,6 +119,5 @@ export function SettingsClient({ user, preferences }: SettingsClientProps) {
           </div>
         </div>
       </div>
-    </>
   )
 }

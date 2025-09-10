@@ -23,8 +23,8 @@ const tips = [
 
 export default function QuickTips() {
   return (
-    <section id="quick-tips" className="py-20 px-6 bg-gray-50/80 backdrop-blur-sm">
-      <div className="max-w-5xl mx-auto">
+    <section id="quick-tips" className="py-20 w-full bg-gray-50/80 backdrop-blur-sm">
+      <div className="w-full px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900">快速上手技巧</h2>
           <p className="text-lg text-gray-600 mt-2">最大化您的训练效果</p>

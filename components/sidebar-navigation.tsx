@@ -1,103 +1,86 @@
+// components/sidebar-navigation.tsx
 "use client";
 
+import { useInterfaceStore } from "@/lib/store/useInterfaceStore";
+import { Home, BarChart, History, Settings, ChevronsLeft, ChevronsRight } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { ChevronsLeft, ChevronsRight, Home, BarChart3, BookOpen, Settings } from "lucide-react";
-import { cn } from "@/lib/utils";
-import type { User } from "@supabase/supabase-js";
+import clsx from "clsx";
 
-interface SidebarNavigationProps {
-  user: User | null;
-  isCollapsed: boolean;
-  onToggleCollapse: () => void;
-}
-
-const navigationItems = [
-  {
-    href: "/",
-    label: "主页",
-    icon: Home,
-  },
-  {
-    href: "/learning-report",
-    label: "学习报告",
-    icon: BarChart3,
-  },
-  {
-    href: "/practice-history",
-    label: "练习记录",
-    icon: BookOpen,
-  },
+// 1. 将主要导航和次要导航（如设置）分开
+const mainNavItems = [
+  { href: "/", icon: Home, label: "主页" },
+  { href: "/learning-report", icon: BarChart, label: "学习报告" },
+  { href: "/practice-history", icon: History, label: "练习记录" },
 ];
 
-export default function SidebarNavigation({ user, isCollapsed, onToggleCollapse }: SidebarNavigationProps) {
-  const pathname = usePathname();
+const userEmail = "agonyderong@gmail.com"; // 您可以从用户状态中获取
 
-  if (isCollapsed) {
-    return null;
-  }
-  return <aside className={cn(
-    "fixed top-0 right-0 h-full bg-white border-l border-gray-200 transition-all duration-300 ease-in-out z-50",
-    "w-56"
-  )}>
-    <div className="flex flex-col h-full">
-      <div className="flex flex-col items-start h-16 px-4 border-b border-gray-200 justify-center">
-        {!isCollapsed && (
-          <>
-            <Link href="/" className="flex items-center gap-2">
-              <span className="text-lg font-semibold text-gray-800">FutureU</span>
-            </Link>
-            {user && <p className="text-sm text-gray-600 mt-1">{user.email}</p>}
-          </>
-        )}
-        <button
-          onClick={onToggleCollapse}
-          className="ml-auto p-2 text-gray-600 hover:text-gray-900 self-start mt-[-20px]"
-        >
-          <ChevronsLeft className="w-5 h-5" />
-        </button>
+export function SidebarNavigation() {
+  const { isSidebarCollapsed, toggleSidebar } = useInterfaceStore();
+
+  return (
+    <aside
+      className={clsx(
+        "hidden md:flex flex-col h-full bg-background border-r transition-all duration-300 ease-in-out",
+        isSidebarCollapsed ? "w-20" : "w-64"
+      )}
+    >
+      {/* ===== 顶部: 品牌 Logo ===== */}
+      <div className={clsx("flex items-center h-20 px-4", 
+        !isSidebarCollapsed ? 'justify-start' : 'justify-center' 
+      )}>
+        <img src="/logo.png" alt="FutureU Logo" className={clsx("transition-all duration-300", !isSidebarCollapsed ? 'h-10 w-auto' : 'h-9 w-auto')} />
+        {!isSidebarCollapsed && <span className="ml-3 text-xl font-bold">FutureU</span>}
       </div>
-      <nav className="flex-1 mt-4 space-y-1 px-2">
-        {navigationItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = pathname === item.href;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex items-center h-10 px-3 rounded-md transition-colors duration-200",
-                isActive
-                  ? "bg-blue-100 text-blue-600"
-                  : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
-                isCollapsed && "justify-center"
-              )}
-            >
-              <Icon className={cn("w-5 h-5", !isCollapsed && "mr-3")} />
-              {!isCollapsed && <span className="text-sm font-medium">{item.label}</span>}
-            </Link>
-          );
-        })}
+
+      {/* ===== 中部: 主要导航 (使用 flex-1 占满剩余空间) ===== */}
+      <nav className="flex-1 space-y-1 px-2 py-4">
+        {mainNavItems.map((item) => (
+          <Link
+            key={item.label}
+            href={item.href}
+            className={clsx(
+              "flex items-center w-full h-12 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors rounded-lg",
+              { "justify-start px-4": !isSidebarCollapsed, "justify-center": isSidebarCollapsed }
+            )}
+          >
+            <item.icon className="h-5 w-5" />
+            {!isSidebarCollapsed && <span className="ml-4">{item.label}</span>}
+          </Link>
+        ))}
       </nav>
-      <div className="mt-auto border-t border-gray-200 p-2">
+
+      {/* ===== 底部: 用户信息 & 设置 ===== */}
+      <div className="border-t p-2">
         <Link
           href="/settings"
-          className={cn(
-            "flex items-center h-10 px-3 rounded-md transition-colors duration-200",
-            pathname === "/settings"
-              ? "bg-blue-100 text-blue-600"
-              : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
-            isCollapsed && "justify-center"
+          className={clsx(
+            "flex items-center w-full h-16 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors rounded-lg",
+            { "p-2": !isSidebarCollapsed, "justify-center": isSidebarCollapsed }
           )}
         >
-          <Settings className={cn("w-5 h-5", !isCollapsed && "mr-3")} />
-          {!isCollapsed && (
-            <div className="flex flex-col">
-              <span className="text-sm font-medium">设置</span>
+          {/* 这里可以放用户头像 */}
+          <div className="flex items-center justify-center h-10 w-10 rounded-full bg-muted-foreground/20 text-foreground font-bold">
+            A
+          </div>
+          {!isSidebarCollapsed && (
+            <div className="ml-3 text-left">
+              <p className="text-sm font-medium text-foreground truncate">Agony</p>
+              <p className="text-xs text-muted-foreground truncate">{userEmail}</p>
             </div>
           )}
         </Link>
       </div>
-    </div>
-  </aside>;
+
+      {/* ===== 最底部: 收缩按钮 ===== */}
+      <div className="border-t p-2">
+        <button
+          onClick={toggleSidebar}
+          className="flex items-center justify-center w-full h-10 text-muted-foreground hover:bg-muted rounded-lg"
+        >
+          {isSidebarCollapsed ? <ChevronsRight /> : <ChevronsLeft />}
+        </button>
+      </div>
+    </aside>
+  );
 }

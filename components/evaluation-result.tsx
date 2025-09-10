@@ -171,7 +171,7 @@ export function EvaluationResult({ result }: EvaluationResultProps) {
 
         <TabsContent value="improvements" className="space-y-4">
           {result.improvements.map((improvement, index) => (
-            <Card key={index} className="border-l-4 border-l-orange-500">
+            <Card key={index} className="border-l-2 border-l-orange-500">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-orange-700">
                   <TrendingUp className="h-5 w-5" />🔧 {improvement.tag}

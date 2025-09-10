@@ -1,8 +1,6 @@
 import { AIEvaluationService } from '../../../lib/ai-service';
 import { CompetencyData } from '../../../types/competency';
 
-const aiService = new AIEvaluationService();
-
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -12,6 +10,8 @@ export async function POST(req: Request) {
       return new Response(JSON.stringify({ error: "缺少有效的competencyData" }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
 
+    // 在运行时实例化AI服务
+    const aiService = new AIEvaluationService();
     // 调用新的建议生成服务
     const suggestions = await aiService.generateSuggestions(competencyData);
 

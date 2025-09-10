@@ -3,17 +3,20 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
-import AppShell from "@/components/app-shell";
+// AppShell 已在 app/layout.tsx 中使用，无需重复导入
 import ProductIntro from "@/components/product-intro";
 import HowItWorks from "@/components/how-it-works";
 import InterviewModulesSection from "@/components/interview-modules-section";
 import CoreFeatures from "@/components/core-features";
 import QuickTips from "@/components/quick-tips";
+import ScrollAnimator from "@/components/scroll-animator";
 
 export default function LandingPage() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
+
 
   useEffect(() => {
     const checkUser = async () => {
@@ -52,16 +55,22 @@ export default function LandingPage() {
   }
 
   return (
-    <AppShell user={user}>
-      <main className="flex-1 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <ProductIntro />
+    <main className="flex-1 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      <div className="w-full">
+        <ProductIntro />
+        <ScrollAnimator delay={0.2}>
           <InterviewModulesSection onStartPractice={handleStartPractice} />
+        </ScrollAnimator>
+        <ScrollAnimator delay={0.4}>
           <HowItWorks />
+        </ScrollAnimator>
+        <ScrollAnimator delay={0.6}>
           <CoreFeatures />
+        </ScrollAnimator>
+        <ScrollAnimator delay={0.8}>
           <QuickTips />
-        </div>
-      </main>
-    </AppShell>
+        </ScrollAnimator>
+      </div>
+    </main>
   );
 }

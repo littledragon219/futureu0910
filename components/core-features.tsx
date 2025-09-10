@@ -20,8 +20,8 @@ const features = [
 
 export default function CoreFeatures() {
   return (
-    <section id="core-features" className="py-20 px-6 bg-white/80 backdrop-blur-sm">
-      <div className="max-w-5xl mx-auto">
+    <section id="core-features" className="py-20 w-full bg-white/80 backdrop-blur-sm">
+      <div className="w-full px-4">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-4 flex items-center justify-center">
             <Zap className="w-8 h-8 mr-3 text-purple-600" />

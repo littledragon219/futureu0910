@@ -48,7 +48,9 @@
     "clsx": "^2.1.1",
     "cmdk": "latest",
     "date-fns": "4.1.0",
+    "dotenv": "^17.2.2",
     "embla-carousel-react": "latest",
+    "framer-motion": "^12.23.12",
     "geist": "latest",
     "input-otp": "latest",
     "lucide-react": "^0.454.0",
@@ -64,7 +66,8 @@
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "latest",
-    "zod": "3.25.67"
+    "zod": "3.25.67",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.9",
