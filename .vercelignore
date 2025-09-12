@@ -5,3 +5,23 @@ dist
 .trae
 .log
 .figma
+
+# 本地环境变量文件
+.env.local
+.env.*.local
+
+# 数据库脚本文件
+*.sql
+scripts/
+
+# 文档文件（保留 README.md）
+*.md
+!README.md
+
+# 临时压缩文件
+temp.zip
+app.zip
+
+# 测试文件
+test-*.js
+e2e-test.js

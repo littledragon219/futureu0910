@@ -1,14 +1,23 @@
 {
-  "buildCommand": "npm run build",
+  "buildCommand": "pnpm run build",
   "outputDirectory": ".next",
   "framework": "nextjs",
-  "installCommand": "npm install",
-  "devCommand": "npm run dev",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "devCommand": "pnpm run dev",
   "regions": ["hkg1"],
   "functions": {
-    "app/api/**/*.ts": {
-      "runtime": "nodejs18.x"
+    "api/**/*.ts": {
+      "runtime": "nodejs20.x",
+      "maxDuration": 30
     }
+  },
+  "env": {
+    "NEXT_PUBLIC_SUPABASE_URL": "@supabase_url",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase_anon_key",
+    "SUPABASE_SERVICE_ROLE_KEY": "@supabase_service_role_key",
+    "SILICONFLOW_API_KEY": "@siliconflow_api_key",
+    "DEEPSEEK_API_KEY": "@deepseek_api_key",
+    "NEXT_PUBLIC_SITE_URL": "@site_url"
   },
   "headers": [
     {
@@ -25,6 +34,18 @@
         {
           "key": "Access-Control-Allow-Headers",
           "value": "Content-Type, Authorization"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
         }
       ]
     }
