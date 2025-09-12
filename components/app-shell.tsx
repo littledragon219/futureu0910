@@ -47,9 +47,12 @@ export default function AppShell({ user: initialUser, children }: AppShellProps)
       )}
       <main className={cn(
         "flex-1 transition-all duration-300 ease-in-out overflow-auto",
-        isDesktop ? (isSidebarCollapsed ? "ml-20" : "ml-64") : "pb-16"
+        isDesktop ? "ml-20" : "pb-16"
       )}>
-        <div className="w-full h-full">
+        <div className={cn(
+          "w-full h-full transition-all duration-300 ease-in-out",
+          isDesktop && !isSidebarCollapsed ? "ml-11" : ""
+        )}>
           {children}
         </div>
       </main>

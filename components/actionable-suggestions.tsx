@@ -27,34 +27,38 @@ interface Suggestion {
 const generateSuggestions = (competencyData: CompetencyData[]) => {
   const suggestions = []
 
-  const lowPerforming = competencyData
-    .filter(c => c.current < 60)
-    .sort((a, b) => a.current - b.current)
+  // 基于能力表现趋势分析，而非具体分数
+  const needsImprovement = competencyData
+    .filter(c => c.current < c.previous || c.current < c.historical)
+    .sort((a, b) => (a.current - a.previous) - (b.current - b.previous))
 
-  const highPerforming = competencyData
-    .filter(c => c.current >= 80)
-    .sort((a, b) => b.current - a.current)
+  const showingStrength = competencyData
+    .filter(c => c.current > c.previous && c.current > c.historical)
+    .sort((a, b) => (b.current - b.previous) - (a.current - a.previous))
 
-  if (lowPerforming.length > 0) {
+  const stablePerformers = competencyData
+    .filter(c => Math.abs(c.current - c.previous) <= 5)
+
+  if (needsImprovement.length > 0) {
     suggestions.push({
-      title: `核心提升方向: ${lowPerforming[0].name}`,
-      description: `您在“${lowPerforming[0].name}”方面的表现有待提高。建议重点关注相关练习，通过结构化思考和案例分析来改善。`,
+      title: `核心提升方向: ${needsImprovement[0].name}`,
+      description: `您在"${needsImprovement[0].name}"方面还有提升空间。建议重点关注相关练习，通过结构化思考和案例分析来改善表现。`,
       type: "improvement",
     })
   }
 
-  if (highPerforming.length > 0) {
+  if (showingStrength.length > 0) {
     suggestions.push({
-      title: `保持优势: ${highPerforming[0].name}`,
-      description: `您在“${highPerforming[0].name}”方面表现出色，请继续保持，并尝试在更多场景下应用该能力。`,
+      title: `保持优势: ${showingStrength[0].name}`,
+      description: `您在"${showingStrength[0].name}"方面表现优秀且持续进步，请继续保持，并尝试在更多场景下应用该能力。`,
       type: "strength",
     })
   }
 
-  if (suggestions.length === 0) {
+  if (stablePerformers.length === competencyData.length) {
     suggestions.push({
-      title: "综合表现均衡",
-      description: "您的各项能力表现均衡，建议持续练习，全面发展。",
+      title: "综合表现稳定",
+      description: "您的各项能力表现稳定，建议在保持现有水平的基础上，选择一到两个重点方向进行突破。",
       type: "info",
     })
   }

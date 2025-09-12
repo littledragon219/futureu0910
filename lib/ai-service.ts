@@ -167,7 +167,12 @@ class AIEvaluationService {
 
   private buildSuggestionPrompt(competencyData: CompetencyData[]): string {
     const competenciesText = competencyData
-      .map(c => `${c.name}: 当前得分 ${c.current}, 上次得分 ${c.previous}, 历史平均分 ${c.historical}`)
+      .map(c => {
+        const currentLevel = c.current >= 80 ? '优秀' : c.current >= 60 ? '良好' : '需要提升';
+        const previousLevel = c.previous >= 80 ? '优秀' : c.previous >= 60 ? '良好' : '需要提升';
+        const historicalLevel = c.historical >= 80 ? '优秀' : c.historical >= 60 ? '良好' : '需要提升';
+        return `${c.name}: 当前表现${currentLevel}, 上次表现${previousLevel}, 历史表现${historicalLevel}`;
+      })
       .join('\n');
 
     return `
@@ -188,7 +193,7 @@ ${competenciesText}
 3. **建议内容**:
    - **识别关键**: 找出1-2个最需要提升的能力
    - **发挥优势**: 强调1个最突出的优势，并建议如何进一步利用
-   - **有数据支撑**: 你的建议需要基于数据，例如，当一个能力的当前得分远低于历史平均分时，应指出这是一个退步，需要警惕
+   - **基于表现趋势**: 你的建议需要基于能力表现的变化趋势，例如，当一个能力的当前表现相较于历史表现有所下滑时，应指出这是一个需要关注的领域
    - **语气**: 你的语气应该是鼓励性的、支持性的，同时保持专业
 
 ## JSON输出示例
@@ -196,12 +201,12 @@ ${competenciesText}
   \"suggestions\": [
     {
       \"title\": \"重点提升：产品设计能力\",
-      \"description\": \"您在\'产品设计\'方面的得分（55分）相较于历史平均（70分）有明显下滑。建议您系统性地学习产品设计原则，并通过拆解知名App来锻炼分析能力。\",
+      \"description\": \"您在\'产品设计\'方面的表现相较于历史水平有所下滑，从优秀降至需要提升。建议您系统性地学习产品设计原则，并通过拆解知名App来锻炼分析能力。\",
       \"type\": \"improvement\"
     },
     {
       \"title\": \"发挥优势：数据分析能力\",
-      \"description\": \"您在\'数据分析\'上表现出色（88分），请继续保持！建议您在下一个项目中主动承担数据分析相关的任务，将此优势转化为项目成果。\",
+      \"description\": \"您在\'数据分析\'上表现优秀且持续稳定，请继续保持！建议您在下一个项目中主动承担数据分析相关的任务，将此优势转化为项目成果。\",
       \"type\": \"strength\"
     }
   ]

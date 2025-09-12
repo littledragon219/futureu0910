@@ -114,12 +114,12 @@ export const generateGrowthAdviceV2 = (feedbacks: QualitativeFeedbackV2[]): stri
   
   // 点评最强项
   if (strongestCompetency && strongestCompetency[1].averageScore > 3.5) {
-    advice += `- **核心优势**: 您的 **${strongestCompetency[0]}** 能力表现最为突出（平均分 ${strongestCompetency[1].averageScore.toFixed(1)}），请继续保持！\n`;
+    advice += `- **核心优势**: 您的 **${strongestCompetency[0]}** 能力表现最为突出，展现出优秀的水平，请继续保持！\n`;
   }
   
   // 诊断最弱项
   if (weakestCompetency && weakestCompetency[1].averageScore < 3.0) {
-    advice += `- **首要提升项**: 我们发现 **${weakestCompetency[0]}** 是您当前最需要突破的瓶颈（平均分 ${weakestCompetency[1].averageScore.toFixed(1)}）。\n`;
+    advice += `- **首要提升项**: 我们发现 **${weakestCompetency[0]}** 是您当前最需要突破的瓶颈，表现还有较大提升空间。\n`;
 
     // 检查最弱项是否有进步
     if (weakestCompetency[1].trend === 'rising') {
@@ -219,7 +219,7 @@ export const generateMockQualitativeFeedbackV2 = (count: number): QualitativeFee
 
             competencyScores[comp] = {
                 score: finalScore,
-                justification: `在 ${comp} 方面，您的表现评分为 ${finalScore} 分，因为... (此处为AI生成的具体理由)`
+                justification: `在 ${comp} 方面，您的表现${finalScore >= 4 ? '优秀' : finalScore >= 3 ? '良好' : '需要提升'}，因为... (此处为AI生成的具体理由)`
             };
         });
         
