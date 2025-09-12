@@ -174,11 +174,14 @@ export function CompetencyDiagnosis({
           <CardContent className="space-y-4">
             <div className="flex justify-center">
               <div className="w-full max-w-md">
-                <CompetencyRadar competencyScores={safeAverageScores} />
+                <CompetencyRadar 
+                  competencyScores={safeAverageScores} 
+                  lastScores={latestScores}
+                />
               </div>
             </div>
             <p className="text-sm text-gray-600 text-center mt-4">
-              雷达图展示了您各项能力的综合平均表现。
+              雷达图展示了您各项能力的综合平均表现与上次答题的对比。
             </p>
           </CardContent>
         </Card>

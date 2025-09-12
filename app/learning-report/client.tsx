@@ -38,6 +38,8 @@ export default function LearningReportClient({ initialData }: LearningReportClie
 
 
 
+
+
   const modules = {
     diagnosis: { 
       title: '你的成长轨迹', 
