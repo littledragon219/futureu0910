@@ -62,42 +62,7 @@ export function PracticeGroupDetail({ sessions, baseSession }: PracticeGroupDeta
         </div>
       </div>
 
-      {/* 统计概览 */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-2">
-              <Target className="h-4 w-4 text-blue-600" />
-              <span className="text-sm font-medium">总题数</span>
-            </div>
-            <p className="text-2xl font-bold mt-1">{stats.totalSessions}</p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-green-600" />
-              <span className="text-sm font-medium">平均分</span>
-            </div>
-            <p className={`text-2xl font-bold mt-1 ${getScoreColor(stats.averageScore)}`}>
-              {stats.averageScore.toFixed(1)}
-            </p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-2">
-              <BarChart3 className="h-4 w-4 text-purple-600" />
-              <span className="text-sm font-medium">最高分</span>
-            </div>
-            <p className={`text-2xl font-bold mt-1 ${getScoreColor(stats.highestScore)}`}>
-              {stats.highestScore}
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+
 
       {/* 题目列表 */}
       <Card>
@@ -122,11 +87,7 @@ export function PracticeGroupDetail({ sessions, baseSession }: PracticeGroupDeta
                         <Badge className={getStageColor(session.interview_stages?.stage_name || '')}>
                           {session.interview_stages?.stage_name || '未知阶段'}
                         </Badge>
-                        {session.ai_feedback && (
-                          <Badge variant="secondary">
-                            AI评估
-                          </Badge>
-                        )}
+                        {/* AI评估标签已移除 */}
                       </div>
                     </div>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -134,11 +95,7 @@ export function PracticeGroupDetail({ sessions, baseSession }: PracticeGroupDeta
                         <Clock className="h-3 w-3" />
                         {new Date(session.created_at).toLocaleString('zh-CN')}
                       </span>
-                      {session.overall_score && (
-                        <span className={`font-medium ${getScoreColor(session.overall_score)}`}>
-                          得分: {session.overall_score}
-                        </span>
-                      )}
+                      {/* 得分显示已移除 */}
                     </div>
                   </div>
                   
@@ -194,12 +151,8 @@ export function PracticeGroupDetail({ sessions, baseSession }: PracticeGroupDeta
                 <h3 className="font-semibold text-gray-900 mb-3">整体表现分析</h3>
                 <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg">
                   <p className="text-gray-700 leading-relaxed">
-                    本次练习共完成 <span className="font-semibold text-blue-600">{stats.totalSessions}</span> 道题目，
-                    平均得分 <span className={`font-semibold ${getScoreColor(stats.averageScore)}`}>{stats.averageScore.toFixed(1)}</span> 分，
-                    最高得分 <span className={`font-semibold ${getScoreColor(stats.highestScore)}`}>{stats.highestScore}</span> 分。
-                    {stats.averageScore >= 80 && '表现优秀，继续保持！'}
-                    {stats.averageScore >= 60 && stats.averageScore < 80 && '表现良好，还有提升空间。'}
-                    {stats.averageScore < 60 && '需要加强练习，建议重点关注基础知识。'}
+                    本次练习共完成 <span className="font-semibold text-blue-600">{stats.totalSessions}</span> 道题目。
+                    通过练习可以帮助您提升面试技能和知识储备。
                   </p>
                 </div>
               </div>
@@ -209,19 +162,15 @@ export function PracticeGroupDetail({ sessions, baseSession }: PracticeGroupDeta
                 <h3 className="font-semibold text-gray-900 mb-3">能力维度分析</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="bg-green-50 p-4 rounded-lg">
-                    <h4 className="font-medium text-green-800 mb-2">优势能力</h4>
+                    <h4 className="font-medium text-green-800 mb-2">练习收获</h4>
                     <p className="text-sm text-green-700">
-                      {stats.averageScore >= 80 ? '逻辑思维清晰，表达能力强' : 
-                       stats.averageScore >= 60 ? '基础扎实，思路较为清晰' : 
-                       '具备一定的基础知识储备'}
+                      通过练习提升了面试技能，积累了答题经验和思路
                     </p>
                   </div>
                   <div className="bg-orange-50 p-4 rounded-lg">
-                    <h4 className="font-medium text-orange-800 mb-2">待提升能力</h4>
+                    <h4 className="font-medium text-orange-800 mb-2">持续改进</h4>
                     <p className="text-sm text-orange-700">
-                      {stats.averageScore < 60 ? '需要加强基础知识学习和逻辑表达' :
-                       stats.averageScore < 80 ? '可以进一步提升答题的深度和广度' :
-                       '可以尝试更具挑战性的题目'}
+                      可以继续练习更多题目，进一步提升答题的深度和广度
                     </p>
                   </div>
                 </div>
@@ -232,27 +181,11 @@ export function PracticeGroupDetail({ sessions, baseSession }: PracticeGroupDeta
                 <h3 className="font-semibold text-gray-900 mb-3">改进建议</h3>
                 <div className="bg-yellow-50 p-4 rounded-lg">
                   <ul className="space-y-2 text-sm text-yellow-800">
-                    {stats.averageScore < 60 && (
-                      <>
-                        <li>• 建议系统学习相关基础知识，夯实理论基础</li>
-                        <li>• 多练习结构化思维，提升逻辑表达能力</li>
-                        <li>• 参考优秀答案，学习答题技巧和思路</li>
-                      </>
-                    )}
-                    {stats.averageScore >= 60 && stats.averageScore < 80 && (
-                      <>
-                        <li>• 深入思考问题本质，提升答案的深度和洞察力</li>
-                        <li>• 关注行业动态，丰富案例和实践经验</li>
-                        <li>• 练习时间管理，在有限时间内给出高质量回答</li>
-                      </>
-                    )}
-                    {stats.averageScore >= 80 && (
-                      <>
-                        <li>• 尝试更具挑战性的高难度题目</li>
-                        <li>• 关注前沿技术和行业趋势，保持知识更新</li>
-                        <li>• 可以考虑指导他人，在教学中进一步提升</li>
-                      </>
-                    )}
+                    <li>• 建议系统学习相关基础知识，夯实理论基础</li>
+                    <li>• 多练习结构化思维，提升逻辑表达能力</li>
+                    <li>• 参考优秀答案，学习答题技巧和思路</li>
+                    <li>• 关注行业动态，丰富案例和实践经验</li>
+                    <li>• 练习时间管理，在有限时间内给出高质量回答</li>
                   </ul>
                 </div>
               </div>

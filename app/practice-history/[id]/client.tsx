@@ -103,15 +103,7 @@ export function PracticeSessionDetail({ user, sessions, learningReport }: Practi
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <Target className="h-5 w-5 text-blue-600" />
-                  </div>
-                  <p className="text-sm text-gray-600">平均分</p>
-                  <p className={`text-xl font-bold ${getScoreColor(averageScore)}`}>
-                    {averageScore}
-                  </p>
-                </div>
+                {/* 平均分显示已移除 */}
                 <div className="text-center">
                   <div className="flex items-center justify-center mb-2">
                     <CheckCircle className="h-5 w-5 text-green-600" />
@@ -121,15 +113,7 @@ export function PracticeSessionDetail({ user, sessions, learningReport }: Practi
                     {sessions.length}
                   </p>
                 </div>
-                <div className="text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <TrendingUp className="h-5 w-5 text-purple-600" />
-                  </div>
-                  <p className="text-sm text-gray-600">最高分</p>
-                  <p className={`text-xl font-bold ${getScoreColor(Math.max(...sessions.map(s => s.overall_score || 0)))}`}>
-                    {Math.max(...sessions.map(s => s.overall_score || 0))}
-                  </p>
-                </div>
+                {/* 最高分显示已移除 */}
                 <div className="text-center">
                   <div className="flex items-center justify-center mb-2">
                     <Clock className="h-5 w-5 text-orange-600" />
@@ -170,13 +154,7 @@ export function PracticeSessionDetail({ user, sessions, learningReport }: Practi
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between pt-2 border-t">
-                    <div className="flex items-center gap-4">
-                      <span className="text-sm text-gray-600">得分:</span>
-                      <span className={`font-bold ${getScoreColor(session.overall_score)}`}>
-                        {session.overall_score || 0} 分
-                      </span>
-                    </div>
+                  <div className="flex items-center justify-end pt-2 border-t">
                     <div className="text-sm text-gray-500">
                       用时: {Math.round((session.practice_duration || 0) / 60)} 分钟
                     </div>

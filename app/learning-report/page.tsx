@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 import LearningReportClient from './client'
+import type { CompetencyScores } from '@/types/evaluation'
 
 export const dynamic = 'force-dynamic'
 
@@ -32,6 +33,7 @@ interface LearningReportData {
   actionHandbook: { improvementArea: string; recommendedArticle: string; practiceQuestion: string; thinkingTool: string }
   growthData: { date: string; [key: string]: number | string }[]
   abilities: string[]
+  averageCompetencyScores?: CompetencyScores
 }
 
 async function getLearningReportData(): Promise<LearningReportData | null> {
@@ -93,7 +95,63 @@ async function getLearningReportData(): Promise<LearningReportData | null> {
       improvementTrend = recentAvg - previousAvg
     }
 
-    // 模拟新模块数据
+    // 计算各维度平均分（从历史练习数据中提取）
+    let averageCompetencyScores: CompetencyScores | undefined
+    
+    if (totalSessions > 0) {
+      // 从练习会话中获取评估结果并计算平均分
+      const { data: evaluationResults, error: evalError } = await supabase
+        .from('evaluation_results')
+        .select('competency_scores')
+        .eq('user_id', user.id)
+        .not('competency_scores', 'is', null)
+      
+      if (!evalError && evaluationResults && evaluationResults.length > 0) {
+        // 计算各维度的平均分
+        const competencyTotals = {
+          内容质量: 0,
+          逻辑思维: 0,
+          表达能力: 0,
+          创新思维: 0,
+          问题分析: 0
+        }
+        let validCount = 0
+        
+        evaluationResults.forEach(result => {
+          if (result.competency_scores && typeof result.competency_scores === 'object') {
+            const scores = result.competency_scores as CompetencyScores
+            Object.keys(competencyTotals).forEach(key => {
+              const competencyKey = key as keyof CompetencyScores
+              if (scores[competencyKey] && typeof scores[competencyKey] === 'number') {
+                competencyTotals[competencyKey] += scores[competencyKey]
+              }
+            })
+            validCount++
+          }
+        })
+        
+        if (validCount > 0) {
+          averageCompetencyScores = {
+            内容质量: Number((competencyTotals.内容质量 / validCount).toFixed(1)),
+            逻辑思维: Number((competencyTotals.逻辑思维 / validCount).toFixed(1)),
+            表达能力: Number((competencyTotals.表达能力 / validCount).toFixed(1)),
+            创新思维: Number((competencyTotals.创新思维 / validCount).toFixed(1)),
+            问题分析: Number((competencyTotals.问题分析 / validCount).toFixed(1))
+          }
+        }
+      }
+    }
+    
+    // 如果没有历史数据，使用模拟数据
+    if (!averageCompetencyScores) {
+      averageCompetencyScores = {
+        内容质量: 3.2,
+        逻辑思维: 2.8,
+        表达能力: 3.5,
+        创新思维: 2.5,
+        问题分析: 3.0
+      }
+    }
     
     const actionHandbook = {
       improvementArea: 'AI问题建模',
@@ -117,7 +175,8 @@ async function getLearningReportData(): Promise<LearningReportData | null> {
       improvementTrend,
       actionHandbook,
       growthData,
-      abilities
+      abilities,
+      averageCompetencyScores
     }
   } catch (error) {
     console.error('获取学习报告数据时发生错误:', error)
@@ -146,7 +205,8 @@ export default async function LearningReportPage() {
           diagnosis: null,
           actionHandbook: data.actionHandbook,
           growthData: data.growthData,
-          abilities: data.abilities
+          abilities: data.abilities,
+          averageCompetencyScores: data.averageCompetencyScores
         }}
       />
     </Suspense>

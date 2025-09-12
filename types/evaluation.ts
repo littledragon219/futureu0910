@@ -34,6 +34,17 @@ export interface Improvement {
 }
 
 /**
+ * 核心能力评分接口
+ */
+export interface CompetencyScores {
+  内容质量: number
+  逻辑思维: number
+  表达能力: number
+  创新思维: number
+  问题分析: number
+}
+
+/**
  * 单题评估响应接口 - V2
  * 对应AI面试教练的评估JSON结构
  */
@@ -47,6 +58,7 @@ export interface IndividualEvaluationResponse {
   strengths: Strength[]
   improvements: Improvement[]
   followUpQuestion: string
+  competencyScores: CompetencyScores
   expertGuidance: {
     questionAnalysis: string
     answerFramework: string

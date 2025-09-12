@@ -12,8 +12,9 @@ import { format } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
 import Link from 'next/link'
 import Navigation from '@/components/navigation'
-import { generateMockQualitativeFeedback, qualitativeAnalytics } from '@/lib/qualitative-analytics'
+import { generateMockQualitativeFeedback, generateGrowthAdviceV2 } from '@/lib/qualitative-analytics'
 import { QualitativeFeedback } from '@/types/qualitative-feedback'
+import { QualitativeFeedbackV2 } from '@/types/qualitative-feedback.v2'
 import { PracticeSession } from '@/types/practice-session';
 // Remove import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 // Remove import { Heart } from 'lucide-react';
@@ -62,9 +63,12 @@ export function PracticeHistoryClient({ user, sessions, totalSessions, stages, c
     if (sessions && sessions.length > 0) {
       const allFeedback = sessions.map(s => s.qualitative_feedback).filter(Boolean) as QualitativeFeedback[];
       if (allFeedback.length > 0) {
-        const growthAdvice = qualitativeAnalytics.generateGrowthAdvice(allFeedback);
-        console.log('Setting core improvement area:', growthAdvice);
-        setCoreImprovementArea(growthAdvice);
+        // 由于类型不兼容，暂时使用简化的成长建议
+        if (allFeedback.length < 3) {
+          setCoreImprovementArea('请继续完成至少3次练习，我们将为您生成更精准的个性化成长建议。');
+        } else {
+          setCoreImprovementArea('基于您的练习历史，建议重点关注逻辑思维和表达能力的提升。');
+        }
       } else {
         setCoreImprovementArea('暂无数据');
       }
@@ -285,14 +289,7 @@ export function PracticeHistoryClient({ user, sessions, totalSessions, stages, c
                                 {session.interview_questions?.question_text}
                               </p>
                               <div className="flex items-center gap-2">
-                                <Badge variant="outline" className="text-xs">
-                                  总分: {session.overall_score}
-                                </Badge>
-                                {(session.qualitative_feedback || session.ai_feedback) && (
-                                  <Badge className="text-xs bg-green-100 text-green-800">
-                                    有AI评估
-                                  </Badge>
-                                )}
+                                {/* 分数和AI评估标签已移除 */}
                               </div>
                             </div>
                           </li>

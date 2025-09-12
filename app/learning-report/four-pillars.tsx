@@ -1,7 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Brain, MessageSquare, Briefcase, Globe } from 'lucide-react'
+import { Brain, MessageSquare, Briefcase, Globe, ChevronDown, ChevronUp } from 'lucide-react'
 
 interface FourPillarsProps {
   abilities: string[]
@@ -9,13 +10,33 @@ interface FourPillarsProps {
 }
 
 export default function FourPillars({ abilities, scores }: FourPillarsProps) {
+  const [expandedPillars, setExpandedPillars] = useState<Record<string, boolean>>({});
+
+  const togglePillar = (pillarId: string) => {
+    setExpandedPillars(prev => ({
+      ...prev,
+      [pillarId]: !prev[pillarId]
+    }));
+  };
+
   return (
     <div className="space-y-6">
       <Card>
-        <CardHeader className="flex flex-row items-center space-x-2">
-    <Brain className="w-6 h-6 text-blue-500" />
-    <CardTitle>能力支柱一：产品洞察与定义</CardTitle>
-  </CardHeader>
+        <CardHeader 
+          className="flex flex-row items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
+          onClick={() => togglePillar('pillar1')}
+        >
+          <div className="flex items-center space-x-2">
+            <Brain className="w-6 h-6 text-blue-500" />
+            <CardTitle>能力支柱一：产品洞察与定义</CardTitle>
+          </div>
+          {expandedPillars['pillar1'] ? (
+            <ChevronUp className="h-5 w-5 text-gray-500" />
+          ) : (
+            <ChevronDown className="h-5 w-5 text-gray-500" />
+          )}
+        </CardHeader>
+        {expandedPillars['pillar1'] && (
         <CardContent>
           <p>这个支柱考察的是用户作为产品经理的基本功：能否从模糊的需求中，精准地发现问题、定义问题，并判断其价值。</p>
           <table className="w-full border-collapse">
@@ -45,12 +66,24 @@ export default function FourPillars({ abilities, scores }: FourPillarsProps) {
             </tbody>
           </table>
         </CardContent>
+        )}
       </Card>
       <Card>
-        <CardHeader className="flex flex-row items-center space-x-2">
-    <MessageSquare className="w-6 h-6 text-green-500" />
-    <CardTitle>能力支柱二：AI方案构建力</CardTitle>
-  </CardHeader>
+        <CardHeader 
+          className="flex flex-row items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
+          onClick={() => togglePillar('pillar2')}
+        >
+          <div className="flex items-center space-x-2">
+            <MessageSquare className="w-6 h-6 text-green-500" />
+            <CardTitle>能力支柱二：AI方案构建力</CardTitle>
+          </div>
+          {expandedPillars['pillar2'] ? (
+            <ChevronUp className="h-5 w-5 text-gray-500" />
+          ) : (
+            <ChevronDown className="h-5 w-5 text-gray-500" />
+          )}
+        </CardHeader>
+        {expandedPillars['pillar2'] && (
         <CardContent>
           <p>这是AIPM的硬核能力。考察用户能否将一个业务问题，转化为一个技术团队可以理解和执行的AI问题。这是替代原先“战略思维力”等模糊标签的核心。</p>
           <table className="w-full border-collapse">
@@ -80,12 +113,24 @@ export default function FourPillars({ abilities, scores }: FourPillarsProps) {
             </tbody>
           </table>
         </CardContent>
+        )}
       </Card>
       <Card>
-        <CardHeader className="flex flex-row items-center space-x-2">
-    <Briefcase className="w-6 h-6 text-yellow-500" />
-    <CardTitle>能力支柱三：逻辑与沟通表达</CardTitle>
-  </CardHeader>
+        <CardHeader 
+          className="flex flex-row items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
+          onClick={() => togglePillar('pillar3')}
+        >
+          <div className="flex items-center space-x-2">
+            <Briefcase className="w-6 h-6 text-yellow-500" />
+            <CardTitle>能力支柱三：逻辑与沟通表达</CardTitle>
+          </div>
+          {expandedPillars['pillar3'] ? (
+            <ChevronUp className="h-5 w-5 text-gray-500" />
+          ) : (
+            <ChevronDown className="h-5 w-5 text-gray-500" />
+          )}
+        </CardHeader>
+        {expandedPillars['pillar3'] && (
         <CardContent>
           <p>这个支柱考察用户在面试中传递信息的能力。无论想法多好，说不清楚等于零。</p>
           <table className="w-full border-collapse">
@@ -115,12 +160,24 @@ export default function FourPillars({ abilities, scores }: FourPillarsProps) {
             </tbody>
           </table>
         </CardContent>
+        )}
       </Card>
       <Card>
-        <CardHeader className="flex flex-row items-center space-x-2">
-    <Globe className="w-6 h-6 text-purple-500" />
-    <CardTitle>能力支柱四：落地与迭代思维</CardTitle>
-  </CardHeader>
+        <CardHeader 
+          className="flex flex-row items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
+          onClick={() => togglePillar('pillar4')}
+        >
+          <div className="flex items-center space-x-2">
+            <Globe className="w-6 h-6 text-purple-500" />
+            <CardTitle>能力支柱四：落地与迭代思维</CardTitle>
+          </div>
+          {expandedPillars['pillar4'] ? (
+            <ChevronUp className="h-5 w-5 text-gray-500" />
+          ) : (
+            <ChevronDown className="h-5 w-5 text-gray-500" />
+          )}
+        </CardHeader>
+        {expandedPillars['pillar4'] && (
         <CardContent>
           <p>这个支柱考察用户是否具备将想法付诸实践，并持续优化的思维。这替代了原先宽泛的“落地执行力”。</p>
           <table className="w-full border-collapse">
@@ -150,6 +207,7 @@ export default function FourPillars({ abilities, scores }: FourPillarsProps) {
             </tbody>
           </table>
         </CardContent>
+        )}
       </Card>
     </div>
   )

@@ -94,6 +94,13 @@ class AIEvaluationService {
      }
    ],
    "followUpQuestion": "<如果isValid为false，则鼓励用户重新尝试；否则，基于用户的回答，提出一个有价值的、互动式的追问>",
+   "competencyScores": {
+     "内容质量": <1-5分，评估回答的内容深度、准确性和相关性>,
+     "逻辑思维": <1-5分，评估回答的逻辑结构、推理能力和条理性>,
+     "表达能力": <1-5分，评估回答的表达清晰度、语言组织和沟通效果>,
+     "创新思维": <1-5分，评估回答的创新性、独特见解和思维突破>,
+     "问题分析": <1-5分，评估对问题的理解深度、分析角度和解决思路>
+   },
    "expertGuidance": {
        "questionAnalysis": "${questionAnalysis}",
        "answerFramework": "${answerFramework}"

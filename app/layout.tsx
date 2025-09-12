@@ -24,9 +24,9 @@ export default async function RootLayout({
   } = await supabase.auth.getUser()
 
   return (
-    <html lang="zh-CN" suppressHydrationWarning>
+    <html lang="zh-CN" className="h-full" suppressHydrationWarning>
       <head />
-      <body className={GeistSans.className} suppressHydrationWarning>
+      <body className={`${GeistSans.className} h-full`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
