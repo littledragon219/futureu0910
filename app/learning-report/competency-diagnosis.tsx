@@ -175,8 +175,7 @@ export function CompetencyDiagnosis({
             <div className="flex justify-center">
               <div className="w-full max-w-md">
                 <CompetencyRadar 
-                  competencyScores={safeAverageScores} 
-                  lastScores={latestScores}
+                  competencyScores={safeAverageScores}
                 />
               </div>
             </div>
@@ -194,7 +193,13 @@ export function CompetencyDiagnosis({
             previous: (latestScores?.[name as keyof CompetencyScores] || 0) * 20,
             historical: (current || 0) * 20
           }))}
-          lastScores={latestScores || {}}
+          lastScores={latestScores ? {
+            '内容质量': latestScores.内容质量 || 0,
+            '逻辑思维': latestScores.逻辑思维 || 0,
+            '表达能力': latestScores.表达能力 || 0,
+            '创新思维': latestScores.创新思维 || 0,
+            '问题分析': latestScores.问题分析 || 0
+          } : {}}
           historicalAverageScores={safeAverageScores}
         />
       </div>

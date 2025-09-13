@@ -4,12 +4,13 @@ import { redirect } from 'next/navigation'
 import { PracticeSessionDetail } from './client'
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export default async function PracticeSessionDetailPage({ params }: PageProps) {
+  const { id } = await params
   const supabase = createServerComponentClient({ cookies })
   
   // 获取当前用户
@@ -23,7 +24,7 @@ export default async function PracticeSessionDetailPage({ params }: PageProps) {
   const { data: baseSession, error: baseError } = await supabase
     .from('practice_sessions')
     .select('session_id, learning_report')
-    .eq('id', params.id)
+    .eq('id', id)
     .eq('user_id', user.id)
     .single()
 

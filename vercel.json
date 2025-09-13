@@ -6,14 +6,7 @@
   "devCommand": "pnpm run dev",
   "regions": ["hkg1"],
 
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "@supabase_url",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase_anon_key",
-    "SUPABASE_SERVICE_ROLE_KEY": "@supabase_service_role_key",
-    "SILICONFLOW_API_KEY": "@siliconflow_api_key",
-    "DEEPSEEK_API_KEY": "@deepseek_api_key",
-    "NEXT_PUBLIC_SITE_URL": "@site_url"
-  },
+
   "headers": [
     {
       "source": "/api/(.*)",

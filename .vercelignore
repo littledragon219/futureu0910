@@ -1,27 +1,36 @@
-node_modules
-build
-dist
-.git
-.trae
-.log
-.figma
+# Vercel ignore file
+# Exclude cache and build artifacts that are too large
 
-# 本地环境变量文件
+.next/cache/
+node_modules/
+.pnpm/
 .env.local
 .env.*.local
+*.log
+.DS_Store
+Thumbs.db
 
-# 数据库脚本文件
-*.sql
-scripts/
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
 
-# 文档文件（保留 README.md）
-*.md
-!README.md
+# Temporary files
+*.tmp
+*.temp
 
-# 临时压缩文件
-temp.zip
-app.zip
+# Large files that shouldn't be deployed
+*.zip
+*.tar.gz
+*.rar
+*.node
 
-# 测试文件
-test-*.js
-e2e-test.js
+# Exclude specific large dependencies
+node_modules/.pnpm/
+node_modules/@next/swc-*/
+
+# Build artifacts
+.next/
+dist/
+build/

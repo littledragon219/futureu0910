@@ -124,7 +124,7 @@ export function PracticeGroupDetail({ sessions, baseSession }: PracticeGroupDeta
                     <h3 className="font-semibold text-gray-900 mb-2">参考答案</h3>
                     <div className="bg-green-50 p-4 rounded-lg">
                       <p className="text-gray-700 leading-relaxed">
-                        {session.interview_questions?.expected_answer || session.interview_questions?.reference_answer || '暂无参考答案'}
+                        {session.interview_questions?.expected_answer || '暂无参考答案'}
                       </p>
                     </div>
                   </div>

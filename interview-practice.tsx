@@ -1103,6 +1103,13 @@ export default function InterviewPractice({ moduleType = "hr", setModuleType, on
         strengths: [],
         improvements: [],
         followUpQuestion: "准备好后，请告诉我们，我们可以继续下一个问题。",
+        competencyScores: {
+          内容质量: 0,
+          逻辑思维: 0,
+          表达能力: 0,
+          创新思维: 0,
+          问题分析: 0
+        },
         expertGuidance: {
           questionAnalysis: "由于服务暂时不可用，无法提供问题解析。",
           answerFramework: "由于服务暂时不可用，无法提供作答框架。"

@@ -12,7 +12,7 @@ import { format } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
 import Link from 'next/link'
 import Navigation from '@/components/navigation'
-import { generateMockQualitativeFeedback, generateGrowthAdviceV2 } from '@/lib/qualitative-analytics'
+import { generateMockQualitativeFeedbackV2, generateGrowthAdviceV2 } from '@/lib/qualitative-analytics'
 import { QualitativeFeedback } from '@/types/qualitative-feedback'
 import { QualitativeFeedbackV2 } from '@/types/qualitative-feedback.v2'
 import { PracticeSession } from '@/types/practice-session';

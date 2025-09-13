@@ -308,6 +308,13 @@ ${competenciesText}
         }
       ],
       followUpQuestion: "请尝试重新提交，我们期待你的精彩回答！",
+      competencyScores: {
+        内容质量: 0,
+        逻辑思维: 0,
+        表达能力: 0,
+        创新思维: 0,
+        问题分析: 0
+      },
       expertGuidance: {
         questionAnalysis: data.questionAnalysis || "不可用",
         answerFramework: data.answerFramework || "不可用"
