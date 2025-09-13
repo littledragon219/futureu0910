@@ -43,7 +43,7 @@ export default function AppShell({ user: initialUser, children }: AppShellProps)
   return (
     <div className="flex h-screen w-screen overflow-hidden">
       {isDesktop && (
-        <SidebarNavigation />
+        <SidebarNavigation user={currentUser} />
       )}
       <main className={cn(
         "flex-1 transition-all duration-300 ease-in-out overflow-auto",

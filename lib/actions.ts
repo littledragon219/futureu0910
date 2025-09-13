@@ -55,5 +55,5 @@ export async function signIn(prevState: any, formData: FormData) {
   }
 
   revalidatePath('/', 'layout')
-  return { success: true, redirectTo: redirectTo || '/learning-report' }
+  return { success: true, redirectTo: redirectTo || '/' }
 }

@@ -19,19 +19,18 @@ const mainNavItems = [
   { href: "/practice-history", icon: History, label: "练习记录" },
 ];
 
-export function SidebarNavigation() {
+interface SidebarNavigationProps {
+  user?: User | null;
+}
+
+export function SidebarNavigation({ user }: SidebarNavigationProps = {}) {
   const { isSidebarCollapsed, toggleSidebar } = useInterfaceStore();
-  const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
   const router = useRouter();
 
-  // 监听用户状态变化
+  // 监听用户资料变化
   useEffect(() => {
-    // 获取当前用户
-    const getCurrentUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-      
+    const getUserProfile = async () => {
       if (user) {
         // 获取用户资料
         const { data: profile } = await supabase
@@ -40,19 +39,21 @@ export function SidebarNavigation() {
           .eq('id', user.id)
           .single();
         setUserProfile(profile);
+      } else {
+        setUserProfile(null);
       }
     };
 
-    getCurrentUser();
+    getUserProfile();
+  }, [user]);
 
-    // 监听认证状态变化
+  // 监听认证状态变化以更新用户资料
+  useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === 'SIGNED_OUT') {
-          setUser(null);
           setUserProfile(null);
         } else if (event === 'SIGNED_IN' && session?.user) {
-          setUser(session.user);
           // 获取用户资料
           const { data: profile } = await supabase
             .from('profiles')

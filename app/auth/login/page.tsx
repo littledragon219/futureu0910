@@ -18,7 +18,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const { data: { user } } = await supabase.auth.getUser()
   
   if (user) {
-    redirect(redirectTo || '/learning-report')
+    redirect(redirectTo || '/')
   }
   
   let errorMessage = ''

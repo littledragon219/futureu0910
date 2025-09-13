@@ -37,7 +37,7 @@ export default function LoginForm({ redirectTo, error }: { redirectTo?: string; 
 
   useEffect(() => {
     if (state?.success) {
-      router.push(state.redirectTo || '/learning-report')
+      router.push(state.redirectTo || '/')
       router.refresh()
     }
     if (state?.error) {

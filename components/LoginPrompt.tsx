@@ -7,7 +7,7 @@ function LoginPrompt() {
   const router = useRouter();
 
   const handleLogin = () => {
-    window.location.assign('/auth/login?redirectTo=/learning-report');
+    window.location.assign('/auth/login?redirectTo=/');
   };
 
   return (
