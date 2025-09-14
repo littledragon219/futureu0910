@@ -161,13 +161,7 @@ export default async function PracticeHistoryPage() {
           <span className="ml-2 text-gray-600">加载中...</span>
         </div>
       }>
-        <PracticeHistoryClient 
-          user={data.user}
-          sessions={data.sessions}
-          totalSessions={data.totalSessions}
-          categories={data.categories}
-          stages={data.stages}
-        />
+        <PracticeHistoryClient user={data.user} />
       </Suspense>
     </div>
   )

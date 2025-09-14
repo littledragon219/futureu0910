@@ -16,9 +16,6 @@ import { generateMockQualitativeFeedbackV2, generateGrowthAdviceV2 } from '@/lib
 import { QualitativeFeedback } from '@/types/qualitative-feedback'
 import { QualitativeFeedbackV2 } from '@/types/qualitative-feedback.v2'
 import { PracticeSession } from '@/types/practice-session';
-// Remove import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-// Remove import { Heart } from 'lucide-react';
-// Remove import { FavoriteButton } from "@/components/ui/favorite-button"
 
 interface FilterOptions {
   stage: string
@@ -29,10 +26,6 @@ interface FilterOptions {
 
 interface PracticeHistoryClientProps {
   user: User
-  sessions: PracticeSession[]
-  totalSessions: number
-  stages: string[]
-  categories: string[]
 }
 
 const SORT_OPTIONS = [
@@ -47,7 +40,12 @@ const DATE_RANGE_OPTIONS = [
   { value: '90days', label: '最近90天' }
 ]
 
-export function PracticeHistoryClient({ user, sessions, totalSessions, stages, categories }: PracticeHistoryClientProps) {
+export function PracticeHistoryClient({ user }: PracticeHistoryClientProps) {
+  const [sessions, setSessions] = useState<PracticeSession[]>([]);
+  const [totalSessions, setTotalSessions] = useState(0);
+  const [stages, setStages] = useState<string[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [filteredSessions, setFilteredSessions] = useState<PracticeSession[]>(sessions)
   const [filters, setFilters] = useState<FilterOptions>({
     stage: 'all',
@@ -57,6 +55,32 @@ export function PracticeHistoryClient({ user, sessions, totalSessions, stages, c
   })
 
   const [coreImprovementArea, setCoreImprovementArea] = useState<string>('暂无数据')
+
+  useEffect(() => {
+    const fetchPracticeHistory = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(`/api/practice-sessions?userId=${user.id}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch practice history');
+        }
+        const data = await response.json();
+        setSessions(data.sessions || []);
+        setTotalSessions(data.totalSessions || 0);
+        setStages(data.stages || []);
+        setCategories(data.categories || []);
+      } catch (error) {
+        console.error('Error fetching practice history:', error);
+        // Optionally, show an error message to the user
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (user) {
+      fetchPracticeHistory();
+    }
+  }, [user]);
 
   useEffect(() => {
     // 基于已有的 sessions 数据计算核心提升点

@@ -82,11 +82,10 @@ export async function GET(request: Request) {
       const { data: questions, error: questionsError } = await supabase
         .from('interview_questions')
         .select('*')
-        .eq('stage_id', stageId)
         .eq('category_id', randomCategoryId)
-        .order('id', { ascending: true });
+        .order('id');
 
-      console.log('[randomCategoryQuestionsInOrder] Questions query result:', { questions, questionsError });
+      console.log('[randomCategoryQuestionsInOrder] Fetched questions for category:', { randomCategoryId, count: questions?.length });
 
       if (questionsError) {
         return NextResponse.json({ questions: [] });
